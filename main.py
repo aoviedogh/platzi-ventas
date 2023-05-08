@@ -104,7 +104,7 @@ def crear_cliente(cliente):
     print("¡Cliente '" + cliente + "' ya existe en la BD!")
     return False
 
-def actualizar_cliente(nombre_cliente):
+def actualizar_cliente(nombre_cliente): 
   global clientes
 
   if (existe_cliente(nombre_cliente)):
