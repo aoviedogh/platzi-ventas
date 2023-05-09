@@ -103,6 +103,23 @@ def listar_clientes():
   
   print("*" * 35)
 
+def lista_cliente(id_cliente):
+  global clientes
+  
+  print("*" * 12, "CLIENTE", "*" * 12)
+
+  cliente = clientes[int(id_cliente)]
+  print("{id} | {nombre} | {apellido} | {edad} | {compania} | {email} | {puesto}".format(
+        id = id_cliente,
+        nombre = cliente["nombre"],
+        apellido = cliente["apellido"],
+        edad = cliente["edad"],
+        compania = cliente["compania"],
+        email = cliente["email"],
+        puesto = cliente["puesto"]))
+
+  print("*" * 35)
+
 def crear_cliente(cliente):
   global clientes
 
@@ -183,11 +200,11 @@ def buscar_cliente(nombre_cliente):
   #Con String
 
   #Con List
-  for cliente in clientes:
-    if cliente != nombre_cliente:
+  for i, cliente in enumerate(clientes):
+    if cliente["nombre"] != nombre_cliente:
       continue
     else:
-      return True
+      return i
   #Con List
     
 def existe_cliente(cliente):
@@ -275,8 +292,11 @@ if __name__ == "__main__":
   elif (accion == "B"):
     print("*" * 10, "BUSCAR CLIENTE", "*" * 9)
     
-    if (buscar_cliente(_get_nombre_cliente())):
-      print("¡Cliente encontrado!")
+    i = buscar_cliente(_get_nombre_cliente())
+    if (i != None):
+      if (i >= 0):
+        lista_cliente(i)
+        print("¡Cliente encontrado!")
     else:
       print("¡Cliente no encontrado!")
   else:
