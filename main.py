@@ -57,6 +57,22 @@ def _get_nombre_campo(nombre_campo):
   
   return campo
 
+def _get_upd_nombre_campo(nombre_campo):
+  campo = None
+
+  while not campo:
+    campo = input("Nuevo {} del cliente: ".format(nombre_campo))
+  
+  return campo
+
+def _get_id_cliente():
+  id = None
+
+  while not id:
+    id = input("ID del cliente: ")
+  
+  return id
+
 def _salir():
   print("*" * 8, "¡PROGRAMA CERRADO!", "*" * 7)
   print("*" * 10, "¡HASTA LUEGO!", "*" * 10)
@@ -84,6 +100,8 @@ def listar_clientes():
           compania = cliente["compania"],
           email = cliente["email"],
           puesto = cliente["puesto"]))
+  
+  print("*" * 35)
 
 def crear_cliente(cliente):
   global clientes
@@ -104,11 +122,20 @@ def crear_cliente(cliente):
     print("¡Cliente '" + cliente + "' ya existe en la BD!")
     return False
 
-def actualizar_cliente(nombre_cliente):
+def actualizar_cliente(id_cliente):
   global clientes
 
-  if (existe_cliente(nombre_cliente)):
-    upd_nombre_cliente = input("Nuevo Nombre Cliente: ").capitalize()
+  if (existe_id_cliente(id_cliente)):
+    cliente = {
+      "nombre": _get_upd_nombre_campo("Nombre"),
+      "apellido": _get_upd_nombre_campo("Apellido"),
+      "edad": _get_upd_nombre_campo("Edad"),
+      "compania": _get_upd_nombre_campo("Compañía"),
+      "email": _get_upd_nombre_campo("Email"),
+      "puesto": _get_upd_nombre_campo("Puesto")
+    }
+
+    #upd_nombre_cliente = input("Nuevo Nombre Cliente: ").capitalize()
     #Con String
     """
     clientes = clientes.replace(nombre_cliente + ",", upd_nombre_cliente + ",")
@@ -116,16 +143,17 @@ def actualizar_cliente(nombre_cliente):
     #Con String
 
     #Con List
-    clientes[clientes.index(nombre_cliente)] = upd_nombre_cliente
+    #clientes[clientes.index(int(id_cliente))] = cliente
+    clientes[int(id_cliente)] = cliente
     #Con List
     return True
   else:
     return False
 
-def eliminar_cliente(nombre_cliente):
+def eliminar_cliente(id_cliente):
   global clientes
 
-  if (existe_cliente(nombre_cliente)):
+  if (existe_id_cliente(id_cliente)):
     #Con String
     """
     clientes = clientes.replace(nombre_cliente + ",", "")
@@ -133,7 +161,7 @@ def eliminar_cliente(nombre_cliente):
     #Con String
 
     #Con List
-    clientes.remove(nombre_cliente)
+    clientes.pop(int(id_cliente))
     #Con List
     return True
   else:
@@ -178,6 +206,13 @@ def existe_cliente(cliente):
     #print("¡Cliente '" + nombre_cliente + "' no existe en la BD!")
     return False
 
+def existe_id_cliente(id_cliente):
+  for i, cliente in enumerate(clientes):
+    if (i != int(id_cliente)):
+      continue
+    else:
+      return True
+
 def mensaje_transaccion(accion):
   if (accion == "C"):
     print("¡Cliente creado satisfactoriamente!")
@@ -213,27 +248,28 @@ if __name__ == "__main__":
   elif (accion == "A"):
     print("*" * 8, "ACTUALIZAR CLIENTE", "*" * 7)
     listar_clientes()
-    nombre_cliente = _get_nombre_cliente()
+    id_cliente = _get_id_cliente()
     
-    if (actualizar_cliente(nombre_cliente)):
+    if (actualizar_cliente(id_cliente)):
       listar_clientes()
       print("*" * 35)
       mensaje_transaccion(accion)
       print("*" * 35)
     else:
-      print("¡Cliente '" + nombre_cliente + "' no existe en la BD!")
+      print("*" * 35)
+      print("¡Cliente con ID '" + id_cliente + "' no existe en la BD!")
   elif (accion == "E"):
     print("*" * 9, "ELIMINAR CLIENTE", "*" * 8)
     listar_clientes()
-    nombre_cliente = _get_nombre_cliente()
+    id_cliente = _get_id_cliente()
     
-    if (eliminar_cliente(nombre_cliente)):
+    if (eliminar_cliente(id_cliente)):
       listar_clientes()
       print("*" * 35)
       mensaje_transaccion(accion)
       print("*" * 35)
     else:
-      print("¡Cliente '" + nombre_cliente + "' no existe en la BD!")
+      print("¡Cliente '" + id_cliente + "' no existe en la BD!")
   elif (accion == "L"):
     listar_clientes()
   elif (accion == "B"):
