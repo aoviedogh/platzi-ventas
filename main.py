@@ -1,6 +1,30 @@
 import sys
+import csv
+import os
+
+clientes = []
+TABLA_CLIENTE = ".clientes.csv"
+ESQUEMA_CLIENTE = ["nombre", "apellido", "edad", "compania", "email", "puesto"]
+
+def _inicializar_clientes():
+  with open(TABLA_CLIENTE, mode="r") as file:
+    reader = csv.DictReader(file, fieldnames = ESQUEMA_CLIENTE)
+
+    for row in reader:
+      clientes.append(row)
+
+def _save_cliente():
+  temp_table = "{}.tmp".format(TABLA_CLIENTE)
+
+  with open(temp_table, mode="w") as file:
+    writer = csv.DictWriter(file, fieldnames = ESQUEMA_CLIENTE)
+    writer.writerows(clientes)
+
+    os.remove(TABLA_CLIENTE)
+    os.rename(temp_table, TABLA_CLIENTE)
 
 #clientes = ["Pablo", "Ricardo"]
+"""
 clientes = [
   {
     "nombre": "Pedro",
@@ -19,6 +43,7 @@ clientes = [
     "puesto": "Arquitecto de Software"
   }
 ]
+"""
 
 def _welcome():
   print("*" * 35)
@@ -241,6 +266,8 @@ def mensaje_transaccion(accion):
     print("")
 
 if __name__ == "__main__":
+  _inicializar_clientes()
+  
   #clientes += "David"
   _welcome()
   accion = input("Elija una opción: ").upper()
@@ -301,3 +328,5 @@ if __name__ == "__main__":
       print("¡Cliente no encontrado!")
   else:
     print("*" * 9, "OPCIÓN INVÁLIDA", "*" * 9)
+  
+  _save_cliente()
